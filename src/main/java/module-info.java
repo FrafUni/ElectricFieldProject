@@ -1,4 +1,4 @@
-module com.example.efpsprite {
+module com.example.electricfieldproject {
     requires javafx.controls;
     requires javafx.fxml;
 
