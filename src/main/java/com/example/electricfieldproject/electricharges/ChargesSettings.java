@@ -12,8 +12,8 @@ public class ChargesSettings {
     public static double NORMALIZER = 1e8;
     public static double NANOCONVERTER = 1e9;
     public static double COULOMB_CONSTANT = 9*Math.pow(10, 9);
-    public static double MAIN_SPHERE_CHARGE_MINLIMIT = -32E-07;
-    public static double MAIN_SPHERE_CHARGE_MAXLIMIT = 32E-07;
+    public static double MAIN_SPHERE_CHARGE_MINLIMIT = -32E-7;
+    public static double MAIN_SPHERE_CHARGE_MAXLIMIT = 32E-7;
     public static double MAIN_SPHERE_RADIUS_MINLIMIT = 20;
     public static double MAIN_SPHERE_RADIUS_MAXLIMIT = 40;
     public static int DEFAULT_FIELD_RADIUS = 265;

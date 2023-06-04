@@ -19,34 +19,31 @@ public class ChangingMainSphereController {
     @FXML private Label signLabel;
     MajorChargedSphere majorChargedSphere;
 
-    /**
-     * Aggangio dei listener in ogni dato
-     */
     @FXML
     public void initialize() {
         effectiveRatioSlider.setMin(50);
         effectiveRatioSlider.setMax(350);
-        effectiveRatioSlider.setMajorTickUnit((effectiveRatioSlider.getMax() - effectiveRatioSlider.getMin())/5);
+        effectiveRatioSlider.setMajorTickUnit((effectiveRatioSlider.getMax() - effectiveRatioSlider.getMin())/4);
 
-        signComboBox.setItems(FXCollections.observableArrayList("Positive", "Negative"));
         sphereRadiusSlider.setMin(ChargesSettings.MAIN_SPHERE_RADIUS_MINLIMIT);
         sphereRadiusSlider.setMax(ChargesSettings.MAIN_SPHERE_RADIUS_MAXLIMIT);
-        sphereRadiusSlider.setMajorTickUnit((sphereRadiusSlider.getMax() - sphereRadiusSlider.getMin())/5);
+        sphereRadiusSlider.setMajorTickUnit((sphereRadiusSlider.getMax() - sphereRadiusSlider.getMin())/4);
 
-        chargeSlider.setMin(ChargesSettings.MAIN_SPHERE_CHARGE_MINLIMIT*(10E07));
-        chargeSlider.setMax(ChargesSettings.MAIN_SPHERE_CHARGE_MAXLIMIT*(10E07));
-        chargeSlider.setMajorTickUnit((chargeSlider.getMax() - chargeSlider.getMin())/5);
+        chargeSlider.setMin(0);
+        chargeSlider.setMax(ChargesSettings.MAIN_SPHERE_CHARGE_MAXLIMIT*(1E7));
+        chargeSlider.setMajorTickUnit((chargeSlider.getMax() - chargeSlider.getMin())/4);
+        signComboBox.setItems(FXCollections.observableArrayList("Positive", "Negative"));
     }
 
     public void setListener(){
         effectiveRatioSlider.setValue(majorChargedSphere.getEffectiveRadius());
         sphereRadiusSlider.setValue(majorChargedSphere.getRadius());
-        chargeSlider.setValue(majorChargedSphere.getCharge());
+        chargeSlider.setValue(majorChargedSphere.getCharge()*majorChargedSphere.getSign()*(1E7));
         signComboBox.setValue(signToString(majorChargedSphere.getSign()));
 
-        sphereRadiusSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setRadius((Double) newValue));
-        chargeSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setCharge((Double) newValue*(10E-07)));
         effectiveRatioSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setEffectiveRadius((Double) newValue));
+        sphereRadiusSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setRadius((Double) newValue));
+        chargeSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setCharge((Double) newValue*(1E-7)));
 
         signComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             majorChargedSphere.setCharge(signStringToDouble(newValue)*majorChargedSphere.getCharge());
@@ -87,7 +84,6 @@ public class ChangingMainSphereController {
 
     public void setMajorChargedSphere(MajorChargedSphere majorChargedSphere){
         this.majorChargedSphere = majorChargedSphere;
-        System.out.println(majorChargedSphere);
         update();
         setListener();
     }
