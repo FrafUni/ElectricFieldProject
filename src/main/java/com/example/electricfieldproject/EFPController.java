@@ -1,11 +1,11 @@
-package com.example.efpsprite;
+package com.example.electricfieldproject;
 
-import com.example.efpsprite.commons.PVector;
-import com.example.efpsprite.electricharges.ChargedSphere;
-import com.example.efpsprite.electricharges.ChargesSettings;
-import com.example.efpsprite.electricharges.MajorChargedSphere;
-import com.example.efpsprite.forceelement.ForceLine;
-import com.example.efpsprite.forceelement.ForceText;
+import com.example.electricfieldproject.commons.PVector;
+import com.example.electricfieldproject.electricharges.ChargedSphere;
+import com.example.electricfieldproject.electricharges.ChargesSettings;
+import com.example.electricfieldproject.electricharges.MajorChargedSphere;
+import com.example.electricfieldproject.forceelement.ForceLine;
+import com.example.electricfieldproject.forceelement.ForceText;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

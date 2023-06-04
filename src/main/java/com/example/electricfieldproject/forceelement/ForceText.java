@@ -1,6 +1,6 @@
-package com.example.efpsprite.forceelement;
+package com.example.electricfieldproject.forceelement;
 
-import com.example.efpsprite.commons.PVector;
+import com.example.electricfieldproject.commons.PVector;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;

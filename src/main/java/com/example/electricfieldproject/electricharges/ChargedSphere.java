@@ -1,7 +1,7 @@
-package com.example.efpsprite.electricharges;
+package com.example.electricfieldproject.electricharges;
 
-import com.example.efpsprite.commons.PVector;
-import com.example.efpsprite.commons.Sprite;
+import com.example.electricfieldproject.commons.PVector;
+import com.example.electricfieldproject.commons.Sprite;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;

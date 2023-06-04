@@ -1,6 +1,6 @@
-package com.example.efpsprite.electricharges;
+package com.example.electricfieldproject.electricharges;
 
-import com.example.efpsprite.commons.PVector;
+import com.example.electricfieldproject.commons.PVector;
 
 /**
  * The default settings for the charges

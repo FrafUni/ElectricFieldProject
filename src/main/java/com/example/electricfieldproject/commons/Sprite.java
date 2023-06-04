@@ -1,6 +1,6 @@
-package com.example.efpsprite.commons;
+package com.example.electricfieldproject.commons;
 
-import com.example.efpsprite.electricharges.ChargesSettings;
+import com.example.electricfieldproject.electricharges.ChargesSettings;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.*;

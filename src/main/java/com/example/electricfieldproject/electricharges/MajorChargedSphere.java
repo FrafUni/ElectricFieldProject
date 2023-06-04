@@ -1,9 +1,7 @@
-package com.example.efpsprite.electricharges;
+package com.example.electricfieldproject.electricharges;
 
-import com.example.efpsprite.commons.PVector;
-import javafx.scene.paint.Color;
+import com.example.electricfieldproject.commons.PVector;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Sphere;
 
 public class MajorChargedSphere extends ChargedSphere{
     private double fieldRadius;

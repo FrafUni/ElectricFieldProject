@@ -1,4 +1,4 @@
-package com.example.efpsprite;
+package com.example.electricfieldproject;
 
 import javafx.application.Application;
 import javafx.application.Platform;

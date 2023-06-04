@@ -1,4 +1,4 @@
-package com.example.efpsprite.commons;
+package com.example.electricfieldproject.commons;
 
 public class PVector {
     public static PVector ZERO = new PVector(0, 0);
