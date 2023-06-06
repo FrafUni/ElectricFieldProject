@@ -272,12 +272,13 @@ public class EFPController {
      */
     void handleFieldComputations(double dt){
         chargedSpheresDeque.forEach(cs -> executorService.submit(() -> {
-            PVector force = majorChargedSphere.computeElectricForce(cs, dt);
+            PVector force = majorChargedSphere.computeElectricForce(cs);
             double accelerationX = force.x / ChargesSettings.ASSUMED_MASS;
             double accelerationY = force.y / ChargesSettings.ASSUMED_MASS;
             double deltaVelocityX = 0.5 * accelerationX * (dt) * ChargesSettings.NORMALIZER;
             double deltaVelocityY = 0.5 * accelerationY * (dt) * ChargesSettings.NORMALIZER;
             cs.setVelocity(cs.getVelocity().add(new PVector(deltaVelocityX, deltaVelocityY)));
+
         }));
 
         //updates the radius and the charge of the main sphere

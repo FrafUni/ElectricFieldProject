@@ -9,7 +9,7 @@ public class ChargesSettings {
     public static double ASSUMED_MASS = 9.11; // *10^-31Kg
     public static double ASSUMED_MINOR_CHARGE = 1.6E-07;// *10^-19C
     public static double ASSUMED_MAJOR_CHARGE = 16E-07;// *10^-19C
-    public static double NORMALIZER = 1e8;
+    public static double NORMALIZER = 1e4;
     public static double NANOCONVERTER = 1e9;
     public static double COULOMB_CONSTANT = 9*Math.pow(10, 9);
     public static double MAIN_SPHERE_CHARGE_MINLIMIT = -32E-7;
