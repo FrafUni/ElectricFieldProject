@@ -4,6 +4,10 @@ Electric Field Project - Project conceived and developed by Francesco De Nicola 
 This program developed in javafx simulates the motion of electric charges attracted or repelled by other charges with greater force
 ![image](https://github.com/FrafUni/ElectricFieldProject/assets/126676700/5f33ba82-decf-494f-bfc4-f3c2e18eb0a4)
 
+### Electric Field
+The circle in the background represents the range of the central charge, the only charge that interacts with all other charges
+
+
 By clicking in the upper right on one of the charges (Red indicates positive, Blue indicates negative) you can place new charges on the test field.
 
 When you insert a new charge you can hold the mouse and drag in any direction to impart a force to it 
