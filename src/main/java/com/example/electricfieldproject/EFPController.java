@@ -1,6 +1,7 @@
 package com.example.electricfieldproject;
 
 import com.example.electricfieldproject.commons.PVector;
+import com.example.electricfieldproject.commons.Sprite;
 import com.example.electricfieldproject.electricharges.ChargedSphere;
 import com.example.electricfieldproject.electricharges.ChargesSettings;
 import com.example.electricfieldproject.electricharges.MajorChargedSphere;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class EFPController {
     @FXML private AnchorPane anchorPane;
@@ -35,6 +37,7 @@ public class EFPController {
     @FXML private Sphere clickableNegativeChargedSphere;
     @FXML private Sphere clickablePositiveChargedSphere;
     @FXML private Pane root;
+    @FXML private Button realityFilterButton;
 
     ConcurrentLinkedDeque<ChargedSphere> chargedSpheresDeque;
 
@@ -44,7 +47,9 @@ public class EFPController {
     ChargedSphere chargedSphere;
     MajorChargedSphere majorChargedSphere;
     boolean creationChargeEnabled = true;
+    boolean majorSphereHided = false;
     boolean isPositiveCharge;
+    boolean realityFilter = false;
     ExecutorService executorService;
 
     @FXML
@@ -65,6 +70,8 @@ public class EFPController {
         anchorPane.toFront();
         executorService = Executors.newFixedThreadPool(4);
         initializeMainTimer();
+
+        //majorChargedSphere.setOnMouseDragged(this::dragMajorChargedSphere);
     }
 
     /**
@@ -73,7 +80,7 @@ public class EFPController {
     public void initializeMajorSphere(){
         double h = ChargesSettings.DEFAULT_HEIGHT;
         double w = ChargesSettings.DEFAULT_WIDTH;
-        majorChargedSphere = new MajorChargedSphere("MajorChargedSphere", 30, 1, new PhongMaterial(Color.web("#3337ff")), mainField.getRadius());
+        majorChargedSphere = new MajorChargedSphere("MajorChargedSphere", 30, new PhongMaterial(Color.web("#3337ff")), mainField.getRadius());
         root.getChildren().add(majorChargedSphere);
         majorChargedSphere.setCenter(new PVector(w/2, h/2));
         majorChargedSphere.setOnMouseClicked(e -> handleChangedSphereProperty());
@@ -94,6 +101,7 @@ public class EFPController {
 
         mainField.setFill(paint);
         root.getChildren().add(mainField);
+        mainField.toBack();
         mainField.setTranslateX(ChargesSettings.DEFAULT_WIDTH/2);
         mainField.setTranslateY(ChargesSettings.DEFAULT_HEIGHT/2);
     }
@@ -128,39 +136,54 @@ public class EFPController {
         handleFieldComputations(dt);
         //check if any sphere exits from the interface
         checkSphereBounds();
+        updatePositions();
     }
 
     /**
      * Insert a new Charged Sphere in the field (onMousePressed)
      * @param event mouse click
      */
-    @FXML
     void initializeChargedSphere(MouseEvent event) {
+        chargedSphere = null;
+        for(ChargedSphere cs : chargedSpheresDeque){
+            if(PVector.distance(cs.getLocation(), new PVector(event.getX(),event.getY())) < cs.getRadius()){
+                chargedSphere = cs;
+            }
+        }
+
         forceText = new ForceText();
         forceLine = new ForceLine(event.getX(), event.getY(), event.getX(), event.getY());
         root.getChildren().addAll(forceLine, forceText);
         forceLine.setVisible(true);
+        forceLine.toBack();
 
-        if(isPositiveCharge)
-            chargedSphere = new ChargedSphere("ChargedSphere", 20, ChargesSettings.ASSUMED_MINOR_CHARGE, new PhongMaterial(Color.web("#3337ff")));
-        else
-            chargedSphere = new ChargedSphere("ChargedSphere", 20, -ChargesSettings.ASSUMED_MINOR_CHARGE, new PhongMaterial(Color.web("#ff3232")));
+        if(chargedSphere == null){
+            if(isPositiveCharge)
+                chargedSphere = new ChargedSphere("ChargedSphere", 20, ChargesSettings.ASSUMED_MINOR_CHARGE, new PhongMaterial(Color.web("#3337ff")));
+            else
+                chargedSphere = new ChargedSphere("ChargedSphere", 20, -ChargesSettings.ASSUMED_MINOR_CHARGE, new PhongMaterial(Color.web("#ff3232")));
 
-        chargedSphere.setCenter(new PVector(event.getX(), event.getY()));
-        root.getChildren().add(chargedSphere);
+            chargedSphere.setCenter(new PVector(event.getX(), event.getY()));
+            root.getChildren().add(chargedSphere);
+        }
+        else{
+            chargedSpheresDeque.remove(chargedSphere);
+            chargedSphere.showDetails();
+            chargedSphere.setVelocity(new PVector(0,0));
+        }
     }
 
     /**
      * Let the user choose the force to apply to the charged sphere
      * @param event mouse drag
      */
-    @FXML
     void dragForceLine(MouseEvent event) {
         forceText.setOwner(new PVector(event.getX(), event.getY()));
         forceLine.setEnd(new PVector(event.getX(), event.getY()));
 
-        forceText.setText(String.format("%.1fmC", ForceLine.getHypotenuse(forceLine)/ChargesSettings.CONVERTER));
-        if(isPositiveCharge)
+
+        forceText.setText(String.format("%.1fµN", ForceLine.getHypotenuse(forceLine)/ChargesSettings.CONVERTER));
+        if(chargedSphere.getCharge() > 0)
             forceLine.setStroke(Color.BLUE);
         else
             forceLine.setStroke(Color.RED);
@@ -171,15 +194,13 @@ public class EFPController {
      * adds the charged sphere  to the list of charged spheres
      * @param event mouse release
      */
-    @FXML
     void releaseChargedSphere(MouseEvent event) {
+        chargedSphere.hideDetails();
         chargedSpheresDeque.add(chargedSphere);
 
         chargedSphere.applyImpulseForce(new PVector((forceLine.getStartX() - forceLine.getEndX())/ChargesSettings.CONVERTER,
                 (forceLine.getStartY() - forceLine.getEndY())/ChargesSettings.CONVERTER));
 
-      //  chargedSphere.applyImpulseForce(majorChargedSphere.calculateOrbitVector(chargedSphere));
-        System.out.println(chargedSphere);
         root.getChildren().removeAll(forceText, forceLine);
         forceText = null;
         forceLine = null;
@@ -206,6 +227,7 @@ public class EFPController {
             root.setOnMouseReleased(null);
             SphereLabel.setText("Click to create a new Charged Sphere -->");
             creationChargeEnabled = true;
+            //majorChargedSphere.setOnMouseDragged(this::dragMajorChargedSphere);
         }
     }
 
@@ -230,7 +252,7 @@ public class EFPController {
             chargedSpheresDeque.clear();
         }catch (NoSuchElementException e) {
             new Alert(Alert.AlertType.WARNING, "No charge to delete").showAndWait();
-        }catch (RuntimeException e){
+        }catch (RuntimeException ignore){
             new Alert(Alert.AlertType.WARNING, "Problems on deleting charges, duplicate children on the root Pane").showAndWait();
         }
     }
@@ -251,13 +273,13 @@ public class EFPController {
         for(Iterator<ChargedSphere> iter = chargedSpheresDeque.iterator(); iter.hasNext();) {
             ChargedSphere cs = iter.next();
             double radius = cs.getRadius();
-            if(cs.getLocation().y + radius >= bottomLimit){
+            if(cs.getLocation().y + radius >= (bottomLimit)){
                 removeChargedSphere(cs);
             }
             if(cs.getLocation().x + radius >= rightLimit){
                 removeChargedSphere(cs);
             }
-            if(cs.getLocation().y - radius <= (topLimit - 52)){
+            if(cs.getLocation().y - radius <= (topLimit-52)){
                 removeChargedSphere(cs);
             }
             if(cs.getLocation().x - radius <= leftLimit){
@@ -272,27 +294,42 @@ public class EFPController {
      */
     void handleFieldComputations(double dt){
         chargedSpheresDeque.forEach(cs -> executorService.submit(() -> {
-            PVector force = majorChargedSphere.computeElectricForce(cs);
-            double accelerationX = force.x / ChargesSettings.ASSUMED_MASS;
-            double accelerationY = force.y / ChargesSettings.ASSUMED_MASS;
-            double deltaVelocityX = 0.5 * accelerationX * (dt) * ChargesSettings.NORMALIZER;
-            double deltaVelocityY = 0.5 * accelerationY * (dt) * ChargesSettings.NORMALIZER;
-            cs.setVelocity(cs.getVelocity().add(new PVector(deltaVelocityX, deltaVelocityY)));
-
+            PVector force;
+            //other charges, only if the filter is enabled
+            if(realityFilter)
+                for(ChargedSphere cs1 : chargedSpheresDeque.stream().filter(cs2 -> !cs2.equals(cs)).toList()){
+                    force = cs1.computeElectricForce(cs);
+                    cs.computeVelocity(force, dt);
+                }
+            //main charge
+            if(majorChargedSphere.isOnField(cs)){
+                force = majorChargedSphere.computeElectricForce(cs);
+                cs.computeVelocity(force, dt);
+            }
         }));
 
         //updates the radius and the charge of the main sphere
         for(Iterator<ChargedSphere> iter = chargedSpheresDeque.iterator(); iter.hasNext();) {
             ChargedSphere cs = iter.next();
             if(majorChargedSphere.isOverlaid(cs)){
-                majorChargedSphere.updateMainSphere(cs);
+                majorChargedSphere.updateSphere(cs);
                 removeChargedSphere(cs);
             }
         }
     }
 
     /**
-     * try to remove the charged sphere
+     * Updates the location of the major sphere in case his position has changed without changing the location of his vector,
+     * and the location of the main field.
+     */
+    private void updatePositions() {
+        majorChargedSphere.updateLocation();
+        mainField.setTranslateX(majorChargedSphere.getTranslateX());
+        mainField.setTranslateY(majorChargedSphere.getTranslateY());
+    }
+
+    /**
+     * tries to remove the charged sphere
      * @param cs charged sphere to remove
      */
     public void removeChargedSphere(ChargedSphere cs) {
@@ -304,6 +341,21 @@ public class EFPController {
         }
         catch (NoSuchElementException e){
             new Alert(Alert.AlertType.WARNING, "No charge to delete").showAndWait();
+        }
+    }
+
+    /**
+     * tries to stop the charged sphere
+     * @param cs charged sphere to remove
+     */
+    public void stopChargedSphere(ChargedSphere cs) {
+        try{
+            cs.setVelocity(new PVector(0,0));
+            // removes the sphere from the list
+            chargedSpheresDeque.remove(cs);
+        }
+        catch (NoSuchElementException e){
+            new Alert(Alert.AlertType.WARNING, "No charge to stop").showAndWait();
         }
     }
 
@@ -330,11 +382,19 @@ public class EFPController {
             // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
-            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-
-            }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleRealityFilter() {
+        if (realityFilter) {
+            realityFilter = false;
+            realityFilterButton.setText("RealityFilterDisabled");
+        } else {
+            realityFilter = true;
+            realityFilterButton.setText("RealityFilterEnabled");
         }
     }
 }

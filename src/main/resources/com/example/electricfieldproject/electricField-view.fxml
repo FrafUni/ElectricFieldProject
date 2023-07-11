@@ -37,6 +37,7 @@
                   <Font name="System Bold" size="17.0" />
                </font>
             </Text>
+            <Button fx:id="realityFilterButton" layoutX="578.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#handleRealityFilter" text=" Reality filter disabled" />
             </children>
         </AnchorPane>
    </top>

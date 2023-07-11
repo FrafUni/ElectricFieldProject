@@ -10,16 +10,17 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="343.0" prefWidth="381.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.electricfieldproject.ChangingMainSphereController">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="465.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.electricfieldproject.ChangingMainSphereController">
    <expandableContent>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
    </expandableContent>
    <content>
-      <GridPane>
+      <GridPane prefHeight="395.0" prefWidth="465.0">
          <columnConstraints>
+            <ColumnConstraints />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.20001220703125" minWidth="10.0" prefWidth="95.60003662109375" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.99999999999997" minWidth="10.0" prefWidth="154.39996337890622" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -27,22 +28,30 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label text="Effective radius" GridPane.rowIndex="1" />
-            <Label text="Charge" GridPane.rowIndex="3" />
-            <Label text="Sign" GridPane.rowIndex="4" />
-            <Label text="Actual parameters" GridPane.columnIndex="1" />
-            <Label text="New values" GridPane.columnIndex="2" />
-            <Slider fx:id="chargeSlider" blockIncrement="5.0" majorTickUnit="8.0" max="32.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label fx:id="effectiveRatioLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="chargeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="signLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="signComboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Slider fx:id="effectiveRatioSlider" blockIncrement="5.0" majorTickUnit="5.0" max="40.0" min="20.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label text="Sphere radius" GridPane.rowIndex="2" />
-            <Label fx:id="sphereRadiusLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Slider fx:id="sphereRadiusSlider" blockIncrement="5.0" majorTickUnit="5.0" showTickLabels="true" showTickMarks="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label text="Effective radius" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Charge" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="X" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Actual parameters" GridPane.columnIndex="2" />
+            <Label text="New values" GridPane.columnIndex="3" />
+            <Slider fx:id="chargeSlider" blockIncrement="5.0" majorTickUnit="8.0" max="32.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Label fx:id="effectiveRatioLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label fx:id="chargeLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="signLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <ComboBox fx:id="signComboBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <Slider fx:id="effectiveRatioSlider" blockIncrement="5.0" majorTickUnit="5.0" max="40.0" min="20.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label text="Sphere radius" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="sphereRadiusLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Slider fx:id="sphereRadiusSlider" blockIncrement="5.0" majorTickUnit="5.0" showTickLabels="true" showTickMarks="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label text="Sign" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Y" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Slider fx:id="Xslider" blockIncrement="100.0" majorTickUnit="50.0" max="800.0" minorTickCount="10" showTickLabels="true" showTickMarks="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+            <Label fx:id="Ylabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Label fx:id="Xlabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Slider fx:id="Yslider" blockIncrement="100.0" majorTickUnit="50.0" max="800.0" minorTickCount="10" showTickLabels="true" showTickMarks="true" GridPane.columnIndex="3" GridPane.rowIndex="6" />
          </children>
       </GridPane>
    </content>

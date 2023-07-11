@@ -13,10 +13,14 @@ public class ChangingMainSphereController {
     @FXML private Slider chargeSlider;
     @FXML private Slider effectiveRatioSlider;
     @FXML private Slider sphereRadiusSlider;
+    @FXML private Slider Xslider;
+    @FXML private Slider Yslider;
     @FXML private Label chargeLabel;
     @FXML private Label effectiveRatioLabel;
     @FXML private Label sphereRadiusLabel;
     @FXML private Label signLabel;
+    @FXML private Label Xlabel;
+    @FXML private Label Ylabel;
     MajorChargedSphere majorChargedSphere;
 
     @FXML
@@ -24,6 +28,12 @@ public class ChangingMainSphereController {
         effectiveRatioSlider.setMin(50);
         effectiveRatioSlider.setMax(350);
         effectiveRatioSlider.setMajorTickUnit((effectiveRatioSlider.getMax() - effectiveRatioSlider.getMin())/4);
+        Xslider.setMin(10);
+        Xslider.setMax(790);
+        Xslider.setMajorTickUnit((Xslider.getMax() - Xslider.getMin())/4);
+        Yslider.setMin(0);
+        Yslider.setMax(494);
+        Yslider.setMajorTickUnit((Yslider.getMax() - Yslider.getMin())/4);
 
         sphereRadiusSlider.setMin(ChargesSettings.MAIN_SPHERE_RADIUS_MINLIMIT);
         sphereRadiusSlider.setMax(ChargesSettings.MAIN_SPHERE_RADIUS_MAXLIMIT);
@@ -36,12 +46,19 @@ public class ChangingMainSphereController {
     }
 
     public void setListener(){
-        effectiveRatioSlider.setValue(majorChargedSphere.getEffectiveRadius());
+        effectiveRatioSlider.setValue(majorChargedSphere.getFieldRadius());
+        Xslider.setValue(majorChargedSphere.getTranslateX());
+        Yslider.setValue(majorChargedSphere.getTranslateY());
         sphereRadiusSlider.setValue(majorChargedSphere.getRadius());
         chargeSlider.setValue(majorChargedSphere.getCharge()*majorChargedSphere.getSign()*(1E7));
         signComboBox.setValue(signToString(majorChargedSphere.getSign()));
 
-        effectiveRatioSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setEffectiveRadius((Double) newValue));
+
+        effectiveRatioSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setFieldRadius((Double) newValue));
+        double nv;
+        Xslider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setTranslateX((Double) newValue));
+        Yslider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setTranslateY((Double) newValue));
+
         sphereRadiusSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setRadius((Double) newValue));
         chargeSlider.valueProperty().addListener((observable, oldValue, newValue) -> majorChargedSphere.setCharge((Double) newValue*(1E-7)));
 
@@ -77,9 +94,11 @@ public class ChangingMainSphereController {
 
     void update() {
         chargeLabel.textProperty().set(String.valueOf(majorChargedSphere.getCharge()));
-        effectiveRatioLabel.textProperty().set(String.valueOf(majorChargedSphere.getEffectiveRadius()));
+        effectiveRatioLabel.textProperty().set(String.valueOf(majorChargedSphere.getFieldRadius()));
         signLabel.textProperty().set(signToString(majorChargedSphere.getSign()));
         sphereRadiusLabel.textProperty().set(String.valueOf(majorChargedSphere.getRadius()));
+        Xlabel.textProperty().set(String.valueOf(majorChargedSphere.getTranslateX()));
+        Ylabel.textProperty().set(String.valueOf(majorChargedSphere.getTranslateY()));
     }
 
     public void setMajorChargedSphere(MajorChargedSphere majorChargedSphere){

@@ -14,6 +14,7 @@ public class EFPApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(EFPApplication.class.getResource("electricField-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Electric Field");
+
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
             Platform.exit();

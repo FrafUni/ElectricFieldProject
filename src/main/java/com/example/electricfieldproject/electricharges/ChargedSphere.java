@@ -2,10 +2,11 @@ package com.example.electricfieldproject.electricharges;
 
 import com.example.electricfieldproject.commons.PVector;
 import com.example.electricfieldproject.commons.Sprite;
+import com.example.electricfieldproject.forceelement.ForceText;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
-
+import javafx.scene.text.Font;
 import java.util.Optional;
 
 /**
@@ -15,6 +16,7 @@ import java.util.Optional;
  * takes precautions in case there are no (or more) spheres in the view.
  */
 public class ChargedSphere extends Sprite {
+
     private double charge;
 
     public ChargedSphere(String name, double radius) {
@@ -109,6 +111,56 @@ public class ChargedSphere extends Sprite {
         }
     }
 
+    /**
+     * Shows every relevant detail of the charge
+     */
+    public void showDetails(){
+        ForceText details = new ForceText("");
+        details.setTranslateY(-(getRadius()+50));
+        this.addView("details", details);
+        details.setFont(new Font(10));
+        details.setText("charge: " + getCharge() +
+                        "\nlocation=" + getLocation() +
+                        "\nvelocity=" + getVelocity() +
+                        "\nmass=" + getMass() + "E-31");
+    }
+    public void hideDetails(){
+        this.removeView("#details");
+    }
+
+    public void updateLocation(){
+        setLocation(new PVector(getTranslateX(), getTranslateY()));
+    }
+
+    /**
+     * Compute the electric field for a specific charged sphere
+     * @param cs the charged sphere whose speed has to be changed
+     * @return a new ForceVector that is the new velocity vector of the sphere
+     */
+    public PVector computeElectricForce (ChargedSphere cs){
+
+        try{
+            double r = PVector.distance(this.getLocation(), cs.getLocation());
+            double rX = (cs.getTranslateX() - this.getLocation().x);
+            double rY = (cs.getTranslateY() - this.getLocation().y);
+            PVector actual = new PVector(rX, rY);
+            double F = ChargesSettings.COULOMB_CONSTANT*this.getCharge() * cs.getCharge() / r*r;
+            return new PVector(PVector.normalize(actual).multiply(F));
+        }catch (ArithmeticException ignored){
+            return PVector.ZERO;
+        }
+    }
+
+    /**
+     * Compute the velocity for a specific charged sphere given the force to apply
+     * @param force the force to apply
+     * @param dt the delta time elapsed after the last computation
+     */
+    public void computeVelocity(PVector force, double dt){
+        PVector acceleration = force.multiply(1/ChargesSettings.ASSUMED_MASS);
+        PVector deltavelocity = acceleration.multiply(0.5*dt*ChargesSettings.NORMALIZER);
+        this.setVelocity(this.getVelocity().add(deltavelocity));
+    }
     @Override
     public String toString() {
         return "ChargedSphere{" +
@@ -120,4 +172,5 @@ public class ChargedSphere extends Sprite {
                 ", mass=" + getMass() +
                 '}';
     }
+
 }
